@@ -113,7 +113,6 @@ gulp.task('deploy', ['git:info'], function (callback) {
         repository: `https://${git.login}:${git.token}@${git.repo}`,
         branches: ['HEAD'],
         remoteBranch: 'gh-pages',
-        prefix: dir.dist,
         message: git.commit
       })
       .on('error', function (err) {

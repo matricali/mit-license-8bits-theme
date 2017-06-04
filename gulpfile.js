@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+var fs = require('fs')
 var gulp = require('gulp')
 var less = require('gulp-less')
 var path = require('path')
@@ -30,6 +31,7 @@ var inject = require('gulp-inject-string')
 var sequence = require('run-sequence')
 var exec = require('child_process').exec
 var deploy = require('gulp-deploy-git')
+var uglify = require('gulp-uglify')
 
 var pkg = require('./package.json')
 
@@ -51,24 +53,50 @@ gulp.task('less', function () {
       paths: [path.join(__dirname, 'less')],
       compress: true
     }))
-    .pipe(gulp.dest('./dist/css'))
+    .pipe(gulp.dest(dir.dist + '/themes'))
 })
 
 gulp.task('postcss', function () {
-  gulp.src('dist/css/*.css')
+  gulp.src(dir.dist + '/themes/*.css')
     .pipe(inject.prepend('/* 8bits theme v' + pkg.version + ' by @jorge-matricali, ' + pkg.repository.url + ' */\n'))
-    .pipe(gulp.dest('dist/css/'))
+    .pipe(gulp.dest(dir.dist + '/themes/'))
+})
+
+gulp.task('copy', function () {
+  gulp.src('index.html')
+    .pipe(gulp.dest(dir.dist))
+})
+
+gulp.task('customizer', function () {
+  var themeVariants = fs.readdirSync(dir.dist + '/themes')
+  var i = themeVariants.length
+  while (i--) {
+    if (themeVariants[i].indexOf('.css', themeVariants[i].length - (4)) !== -1) {
+      themeVariants[i] = themeVariants[i].replace('8bits-', '').replace('.css', '')
+    } else {
+      themeVariants.splice(i, 1)
+    }
+  }
+  return gulp.src('change-theme.js')
+    .pipe(inject.replace(
+      'var themeVariants = \\[\\]',
+      `var themeVariants = ${JSON.stringify(themeVariants)}`
+    ))
+    // .pipe(uglify())
+    .pipe(gulp.dest(dir.dist))
 })
 
 gulp.task('clean', function () {
   return del([
-    'dist/css/*.css'
+    dir.dist + '/themes/*.css',
+    dir.dist + '/index.html',
+    dir.dist + '/change-theme.js'
   ])
 })
 
 gulp.task('build', function (callback) {
   console.log('Building...')
-  sequence('clean', 'less', 'postcss', callback)
+  sequence('clean', ['copy', 'less'], ['customizer', 'postcss'], callback)
 })
 
 gulp.task('git:info', function (callback) {
@@ -79,13 +107,13 @@ gulp.task('git:info', function (callback) {
 })
 
 gulp.task('deploy', ['git:info'], function (callback) {
-  gulp.src('./dist/**/*', {read: false})
+  gulp.src(dir.dist + '/**/*', {read: false})
     .pipe(
       deploy({
         repository: `https://${git.login}:${git.token}@${git.repo}`,
         branches: ['HEAD'],
         remoteBranch: 'gh-pages',
-        prefix: './dist',
+        prefix: dir.dist,
         message: git.commit
       })
       .on('error', function (err) {

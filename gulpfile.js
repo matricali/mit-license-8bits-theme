@@ -82,7 +82,7 @@ gulp.task('customizer', function () {
       'var themeVariants = \\[\\]',
       `var themeVariants = ${JSON.stringify(themeVariants)}`
     ))
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(gulp.dest(dir.dist))
 })
 

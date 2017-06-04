@@ -1,0 +1,21 @@
+{
+  "name": "mit-license-8bits-theme",
+  "description": "A retro theme generator for the mit-license",
+  "version": "0.1.1",
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jorge-matricali/mit-license-8bits-theme"
+  },
+  "author": "Jorge Matricali",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jorge-matricali/mit-license-8bits-theme/issues"
+  },
+  "homepage": "https://github.com/jorge-matricali/mit-license-8bits-theme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-less": "^3.3.0",
+    "del": "^2.2.2"
+  }
+}

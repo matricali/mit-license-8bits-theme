@@ -27,9 +27,23 @@ var less = require('gulp-less')
 var path = require('path')
 var del = require('del')
 var inject = require('gulp-inject-string')
-var runSequence = require('run-sequence')
+var sequence = require('run-sequence')
+var exec = require('child_process').exec
+var deploy = require('gulp-deploy-git')
 
 var pkg = require('./package.json')
+
+var git = {
+  template: '%B\nBuilt from %H.',
+  commit: undefined,
+  login: process.env.GIT_LOGIN,
+  token: process.env.GIT_TOKEN,
+  repo: process.env.GIT_REPO
+}
+
+var dir = {
+  dist: './dist'
+}
 
 gulp.task('less', function () {
   return gulp.src('./less/8bits-*.less')
@@ -54,7 +68,30 @@ gulp.task('clean', function () {
 
 gulp.task('build', function (callback) {
   console.log('Building...')
-  runSequence('clean', 'less', 'postcss', callback)
+  sequence('clean', 'less', 'postcss', callback)
+})
+
+gulp.task('git:info', function (callback) {
+  exec('git log --format=\'' + git.template + '\' -1', function (err, stdout, stderr) {
+    git.commit = stdout
+    return callback(err)
+  })
+})
+
+gulp.task('deploy', ['git:info'], function (callback) {
+  gulp.src('./dist/**/*', {read: false})
+    .pipe(
+      deploy({
+        repository: `https://${git.login}:${git.token}@${git.repo}`,
+        branches: ['HEAD'],
+        remoteBranch: 'gh-pages',
+        prefix: './dist',
+        message: git.commit
+      })
+      .on('error', function (err) {
+        callback(err)
+      })
+    )
 })
 
 gulp.task('default', ['build'])

@@ -2,6 +2,7 @@ language: node_js
 node_js: '5.3'
 env:
   global:
+  - secure: "fvcTDioUhO1lG+16+xdDcbfx5NKkuyEFU3FvfXkAe4N+nUVAgqutT53qr1bI1rMgan6yD7AoVOVa5YjDl6uHRdJAfi1D5kSgHquYwmwZmbafqEVTavM/JnQDOl6bYD38fLfFCYqKkPNUS1ubEDyeFUoJd+2tN3YmQZJyxqsUcOq4kzHavNEQh+cTdD2iQFOEyxJpuHg0eFpDCIU5rGLQndt5ZHROEVkw1qiVokospJpmxd3eK6QP8/Q6BG987g9VkG7qWVBHuvwFR+idy5cX2mVOEkP84uYNfuBfyx6B+rhYCMqINBwa1IBJ8ecW7A6wMOmk2hVYFPaPMgG0DFCU6CNJg738btlBHOrTuMX0uMREwKdZ4N+Y9nlTwlTLk4nv4SYUnT/J2MgRmyv673ilpUekUOf+FNqMwYG7331qxgA2AAkqn5IYr9oeE+YoFvKuF6NwZrT3h1we3J4Um4HPfWaASb0LuiszVkgG+kneakZtAOic4lkvQh+Ox360hH+twpONcCrJdbEOSUn7u+5u4DgVmdS5lSl66EypJ6GHZZfsoiOueIiUQxIAGOmFGNK96biKReSCnLfS9qwZrwfhvy4vNEjeJ5sN2nGHjzOPCee1wL4CazpmP6zpjz+4z/qXrL4u4rs0h7oVu2lhj3ZPxdycd3hTEmvVolmvcFKZrbE="
   - GIT_USER='Jorge Matricali'
   - GIT_EMAIL=jorgematricali@gmail.com
   - GIT_REPO=github.com/jorge-matricali/mit-license-8bits-theme.git

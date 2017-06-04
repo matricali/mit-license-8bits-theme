@@ -26,13 +26,24 @@ var gulp = require('gulp')
 var less = require('gulp-less')
 var path = require('path')
 var del = require('del')
+var inject = require('gulp-inject-string')
+var runSequence = require('run-sequence')
+
+var pkg = require('./package.json')
 
 gulp.task('less', function () {
   return gulp.src('./less/8bits-*.less')
     .pipe(less({
-      paths: [path.join(__dirname, 'less')]
+      paths: [path.join(__dirname, 'less')],
+      compress: true
     }))
     .pipe(gulp.dest('./dist/css'))
+})
+
+gulp.task('postcss', function () {
+  gulp.src('dist/css/*.css')
+    .pipe(inject.prepend('/* 8bits theme v' + pkg.version + ' by @jorge-matricali, ' + pkg.repository.url + ' */\n'))
+    .pipe(gulp.dest('dist/css/'))
 })
 
 gulp.task('clean', function () {
@@ -41,9 +52,9 @@ gulp.task('clean', function () {
   ])
 })
 
-gulp.task('build', ['clean'], function () {
+gulp.task('build', function (callback) {
   console.log('Building...')
-  gulp.start('less')
+  runSequence('clean', 'less', 'postcss', callback)
 })
 
 gulp.task('default', ['build'])

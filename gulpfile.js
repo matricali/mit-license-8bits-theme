@@ -58,7 +58,7 @@ gulp.task('less', function () {
 
 gulp.task('postcss', function () {
   gulp.src(dir.dist + '/themes/*.css')
-    .pipe(inject.prepend('/* 8bits theme v' + pkg.version + ' by @jorge-matricali, ' + pkg.repository.url + ' */\n'))
+    .pipe(inject.prepend('/* 8bits theme v' + pkg.version + ' by Jorge Matricali, ' + pkg.repository.url + ' */\n'))
     .pipe(gulp.dest(dir.dist + '/themes/'))
 })
 

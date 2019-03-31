@@ -62,7 +62,7 @@ window.onload = function () {
       var option = document.createElement('option')
       option.setAttribute('value', themeVariants[i])
       option.appendChild(document.createTextNode(themeVariants[i]))
-      if (themeVariants[i] === 'default') {
+      if (themeVariants[i] === 'monochrome') {
         option.selected = true
       }
       select.appendChild(option)
